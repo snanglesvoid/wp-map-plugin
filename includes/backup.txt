@@ -1,0 +1,1 @@
+[invicta_germany_map label_visibility="always" label_offset="8" initial_animation_timeout="100" locations="be,mu,fr,ha,ko,du,bo" label_positions="be=bottom_right,mu=bottom_right,fr=bottom_right,ha=bottom_right,ko=bottom_left,du=top_right,bo=bottom_right"]
