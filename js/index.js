@@ -1,12 +1,12 @@
 
 function cityCircleMouseover(event) {
     console.log('mouseover')
-    event.setAttribute('r', +event.getAttribute('r') * 5.0 / 4.0)
+    // event.setAttribute('r', +event.getAttribute('r') * 5.0 / 4.0)
     showPopover(event)
 }
 
 function cityCircleMouseout(event) {
-    event.setAttribute('r', +event.getAttribute('r') * 4.0 / 5.0)
+    // event.setAttribute('r', +event.getAttribute('r') * 4.0 / 5.0)
     // hidePopover()
 }
 
@@ -17,21 +17,25 @@ function cityCircleClick (event) {
 
 function showPopover(circle) {
     hidePopover()
-
-    let foreign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject')
-    foreign.className += "map-popover-foreignobject"
-
-    let triangle = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject')
-
-    let fontFamily = window.getComputedStyle(document.getElementsByTagName('body')[0]).fontFamily
+    let popoverWidth = 200
     let popover = document.createElement('div')
+    let fontFamily = window.getComputedStyle(document.getElementsByTagName('body')[0]).fontFamily
     popover.style.background = circle.getAttribute('popupcolor')
     popover.style.color = '#333'
     popover.style.padding = '10px'
-    popover.style.borderRadius = '8px'
-    popover.style.position = 'relative'
+    popover.style.borderRadius = '4px'
+    popover.style.padding = '8px'
+    popover.style.position = 'absolute'
     popover.style.fontFamily = '"Roboto", sans-serif'
+    popover.style.fontSize = '12px'
     popover.style.overflow = 'hidden'
+    popover.style.width = popoverWidth + 'px'
+    popover.style.top = 0
+    popover.style.left = 0
+    popover.classList.add('map-popover')
+    popover.style.opacity = 0
+    popover.style.transition = 'all .4s ease'
+
 
     let style = `
         margin: 0;
@@ -52,6 +56,21 @@ function showPopover(circle) {
         font-size: 1em;
         line-height: 1.4em;
     `
+
+    let triangle = document.createElement('div')
+    triangle.style.width = 0
+    triangle.style.height = 0
+    triangle.style['border-style'] = 'solid'
+    triangle.style['border-width'] = '0 7.5px 10px 7.5px'
+    triangle.style['border-color'] = `transparent transparent ${circle.getAttribute('popupcolor')} transparent`
+    triangle.style.position = 'absolute'
+    triangle.style.transition = 'all .4s ease'
+    triangle.style.opacity = 0.0
+    triangle.classList.add('map-popover')
+
+    setTimeout(() => popover.style.opacity = 1, 100)
+    setTimeout(() => triangle.style.opacity = 1, 100)
+
     let innerHTML = ''
     if (circle.getAttribute('linktext') !== 'N/A') {
         innerHTML += `    
@@ -81,58 +100,36 @@ function showPopover(circle) {
     if (innerHTML === "") {
         popover.style.padding = 0
     }
-    
-    foreign.style.overflow = 'visible'
-    triangle.style.overflow = 'visible'
+
 
     function resize() {
-        // console.log('resize')
-        let svgWidth = circle.parentNode.getBBox().width
-        let pwidth = 1000
-        let rwidth = 400
-        let wRatio = pwidth / svgWidth
-        let width = wRatio * rwidth
-        let height = wRatio * rwidth * 2
-        
-        foreign.setAttribute('width', Math.min(width, 800))
-        foreign.setAttribute('height', Math.min(height, 1600))
-        foreign.style.fontSize = 24 * wRatio + 'px'
-        foreign.style.padding = 10 * wRatio + 'px'
-        
-        foreign.setAttribute('x', Math.max(20, +circle.getAttribute('cx') - width / 2))
-        foreign.setAttribute('y', Math.max(20, +circle.getAttribute('cy') + 15 * wRatio ))
-        
-        // popover.style.marginTop = -10 * wRatio + 'px'
-        popover.style.padding = 12 * wRatio + 'px'
-        
-        triangle.setAttribute('width', 30 * wRatio)
-        triangle.setAttribute('height', 30 * wRatio)
-        triangle.setAttribute('x', +circle.getAttribute('cx') - 15 * wRatio)
-        triangle.setAttribute('y', +circle.getAttribute('cy') + 15 * wRatio)
+        let svg = circle.parentNode
+        let svgWidth = svg.parentNode.getBoundingClientRect().width
+        let svgHeight = svg.parentNode.getBoundingClientRect().height
+        // console.log('svgWidth', svgWidth)
+        // console.log('svgHeight', svgHeight)
+        let cx = svgWidth * (+circle.getAttribute('cx')) / 1000.0 
+        let cy = svgHeight * (+circle.getAttribute('cy')) / 1360.0
+        // console.log('cx, cy', cx, cy)
+
+        popover.style.top = (10 + cy) + 'px'
+        popover.style.left = Math.min(svgWidth-popoverWidth, Math.max(cx - popoverWidth/2, 0)) + 'px'
+
+        triangle.style.top = cy + 'px'
+        triangle.style.left = (cx - 7.5) + 'px'
     }
+
     resize()
     window.addEventListener('resize', resize)
-
-    triangle.innerHTML = `
-    <body xmlns="http://www.w3.org/1999/xhtml">
-        <div style='width: 100%; height: 100%; background: ${circle.getAttribute('popupcolor')}; transform: rotate(45deg)'></div>
-    </body>
-    `
-
-    let bodyWrap = document.createElement('body')
-    bodyWrap.setAttribute('xmlns', "http://www.w3.org/1999/xhtml")
-    bodyWrap.appendChild(popover)
-    foreign.appendChild(bodyWrap)
-    circle.parentNode.appendChild(triangle)
-    circle.parentNode.appendChild(foreign)
+    
+    circle.parentNode.parentNode.appendChild(triangle)
+    circle.parentNode.parentNode.appendChild(popover)
 }
 
 function hidePopover() {
     console.log('hide')
-    let nodes = document.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'foreignObject')
-    // document.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'foreignObject')
+    let nodes = document.getElementsByClassName('map-popover')
     while(nodes[0]) {
         nodes[0].parentNode.removeChild(nodes[0])
     }
 }
-//////////
