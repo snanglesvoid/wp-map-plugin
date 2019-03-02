@@ -114,10 +114,15 @@ function showPopover(circle) {
     window.addEventListener('resize', resize)
 
     triangle.innerHTML = `
-        <div style='width: 50%; height: 50%; margin-left: 50%; background: ${circle.getAttribute('popupcolor')}; transform: translateX(-50%) rotate(45deg)'></div>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+        <div style='width: 100%; height: 100%; background: ${circle.getAttribute('popupcolor')}; transform: rotate(45deg)'></div>
+    </body>
     `
 
-    foreign.appendChild(popover)
+    let bodyWrap = document.createElement('body')
+    bodyWrap.setAttribute('xmlns', "http://www.w3.org/1999/xhtml")
+    bodyWrap.appendChild(popover)
+    foreign.appendChild(bodyWrap)
     circle.parentNode.appendChild(triangle)
     circle.parentNode.appendChild(foreign)
 }
@@ -130,3 +135,4 @@ function hidePopover() {
         nodes[0].parentNode.removeChild(nodes[0])
     }
 }
+//////////
