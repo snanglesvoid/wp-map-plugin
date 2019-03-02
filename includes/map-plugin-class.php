@@ -152,7 +152,8 @@ class Map_Widget extends WP_Widget {
     private function map_svg( $instance ) {
 
         ?>
-        <div style="width: 100%; height: auto; text-align:center; position: relative;">
+        <div style="width: 100%; height: auto; text-align: center;">
+        <div style="max-width: 550px; position: relative; margin-left: 50%; transform: translateX(-50%)">
         <svg xmlns="http://www.w3.org/2000/svg" class="map-plugin-svg" baseprofile="tiny" fill="#7c7c7c" height="auto" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" version="1.2" viewbox="0 0 1000 1360" width="100%"
             style="fill: <?php echo esc_attr($instance['map_color']) ?>!important; max-width: 550px;"
         >
@@ -192,6 +193,7 @@ class Map_Widget extends WP_Widget {
         $this->cities_svg( $instance );
         ?>
         </svg>
+        </div>
         </div>
         <?php
     }

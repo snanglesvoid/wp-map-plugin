@@ -104,7 +104,7 @@ function showPopover(circle) {
 
     function resize() {
         let svg = circle.parentNode
-        let svgWidth = svg.parentNode.getBoundingClientRect().width
+        let svgWidth = Math.min(550, svg.parentNode.getBoundingClientRect().width)
         let svgHeight = svg.parentNode.getBoundingClientRect().height
         // console.log('svgWidth', svgWidth)
         // console.log('svgHeight', svgHeight)
@@ -113,7 +113,7 @@ function showPopover(circle) {
         // console.log('cx, cy', cx, cy)
 
         popover.style.top = (10 + cy) + 'px'
-        popover.style.left = Math.min(svgWidth-popoverWidth, Math.max(cx - popoverWidth/2, 0)) + 'px'
+        popover.style.left = (cx - popoverWidth/2) + 'px'
 
         triangle.style.top = cy + 'px'
         triangle.style.left = (cx - 7.5) + 'px'
