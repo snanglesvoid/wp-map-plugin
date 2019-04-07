@@ -211,10 +211,11 @@ class Map_Widget extends WP_Widget {
 
             $popup = $instance[ 'city_'. ( $i+1 ). '_linktext' ];
             $url = $instance[ 'city_'. ( $i+1 ). '_linkurl' ];
-            $phone = $instance[ 'city_'. ($i+1). '_phone' ];
-            $email = $instance[ 'city_'. ($i+1). '_email' ];
+            $phone = $instance[ 'city_'. ( $i+1 ). '_phone' ];
+            $email = $instance[ 'city_'. ( $i+1 ). '_email' ];
             $cd = $city_data[ $city ];
-            
+            $cityname = $cd['city'];
+
             if ( empty( $city ) || empty( $cd ) ) {
                 continue;
             }
@@ -233,6 +234,7 @@ class Map_Widget extends WP_Widget {
                     linkurl="<?php echo esc_attr( $url ); ?>"
                     phone="<?php echo esc_attr($phone); ?>"
                     email="<?php echo esc_attr($email); ?>"
+                    cityname="<?php echo esc_attr($cityname); ?>"
                     popupcolor="<?php echo esc_attr($instance['popup_color'])?>"
                     onmouseover= "cityCircleMouseover(this)"
                     onmouseout= "cityCircleMouseout(this)"

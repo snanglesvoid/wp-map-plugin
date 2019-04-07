@@ -15,18 +15,54 @@ function cityCircleClick (event) {
     showPopover(event)
 }
 
+function makeCityLabel(circle) {
+    let label = document.createElement('div')
+    label.style.color = '#eee'
+    label.style.background = 'transparent'
+    label.style.position = 'absolute'
+
+    label.innerHTML = `
+        <h4 style='text-transform: uppercase;'>${circle.getAttribute('cityname')}</h4>
+    `
+
+    function resize() {
+        let svg = circle.parentNode
+        let svgWidth = Math.min(550, svg.parentNode.getBoundingClientRect().width)
+        let svgHeight = svg.parentNode.getBoundingClientRect().height
+       
+        let cx = svgWidth * (+circle.getAttribute('cx')) / 1000.0 
+        let cy = svgHeight * (+circle.getAttribute('cy')) / 1360.0
+
+        label.style.top = (20 + cy) + 'px'
+        label.style.left = (cx - popoverWidth/2) + 'px'
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    circle.parentNode.parentNode.appendChild(label)
+}
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+    let circles = document.getElementsByClassName('city-circle')
+    for (var i = 0; i < circles.length; i++) {
+        let circle = cirlces[i]
+        makeCityLabel(circle)
+    }
+});
+
 function showPopover(circle) {
     hidePopover()
     let popoverWidth = 200
     let popover = document.createElement('div')
-    let fontFamily = window.getComputedStyle(document.getElementsByTagName('body')[0]).fontFamily
+    // let fontFamily = window.getComputedStyle(document.getElementsByTagName('body')[0]).fontFamily
     popover.style.background = circle.getAttribute('popupcolor')
     popover.style.color = '#333'
     popover.style.padding = '10px'
     popover.style.borderRadius = '4px'
     popover.style.padding = '8px'
     popover.style.position = 'absolute'
-    popover.style.fontFamily = '"Roboto", sans-serif'
+    // popover.style.fontFamily = '"Roboto", sans-serif'
     popover.style.fontSize = '12px'
     popover.style.overflow = 'hidden'
     popover.style.width = popoverWidth + 'px'
@@ -76,7 +112,7 @@ function showPopover(circle) {
     let innerHTML = ''
     if (circle.getAttribute('linktext') !== 'N/A') {
         innerHTML += `    
-        <p style="${style}" style="font-family: ${fontFamily}">
+        <p style="${style}">
             <i style="${iconStyle}" class="icon-globe"> </i>
             <a href="${circle.getAttribute('linkurl')}" style="${linkStyle}">${circle.getAttribute('linktext').replace(new RegExp('newline', 'g'), '<br/>')}</a>
         </p>
@@ -103,6 +139,7 @@ function showPopover(circle) {
         popover.style.padding = 0
     }
 
+    popover.addEventListener('click', hidePopover)
 
     function resize() {
         let svg = circle.parentNode
