@@ -31,7 +31,11 @@ class Map_Widget extends WP_Widget {
 
         //cities_color
         $popup_color = ! empty( $instance['popup_color']) ? $instance['popup_color'] : esc_html__( '#ffff99', 'mp_domain' );
-        $this->form_group( 'popup_color', $popup_color, 'Popup Color:', 'text' , $popup_color);
+        $this->form_group( 'popup_color', $popup_color, 'Popup Color:', 'text' , $popup_color );
+
+        //font_color
+        $font_color = ! empty( $instance['font_color']) ? $instance['font_color'] : esc_html__( '#eee', 'mp_domain');
+        $this->form_group( 'font_color', $font_color, 'Font Color:', 'text', $font_color );
         
         //city forms
         $cities_data = $this->city_data();
@@ -132,6 +136,7 @@ class Map_Widget extends WP_Widget {
         $this->update_field($instance, $new_instance, 'map_color', '#CCCCCC');
         $this->update_field($instance, $new_instance, 'city_color', '#fe3636');
         $this->update_field($instance, $new_instance, 'popup_color', '#ffff99');
+        $this->upadte_field($instance, $new_instance, 'font_color', '#eee' );
         $n = $instance['no_cities'];
         for ($i = 0; $i < $n; $i++) {
             $field_string = 'city_'. ($i+1);
@@ -209,6 +214,7 @@ class Map_Widget extends WP_Widget {
             $phone = $instance[ 'city_'. ($i+1). '_phone' ];
             $email = $instance[ 'city_'. ($i+1). '_email' ];
             $cd = $city_data[ $city ];
+            
             if ( empty( $city ) || empty( $cd ) ) {
                 continue;
             }

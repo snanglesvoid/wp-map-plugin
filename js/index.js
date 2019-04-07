@@ -36,6 +36,7 @@ function showPopover(circle) {
     popover.style.opacity = 0
     popover.style.transition = 'all .4s ease'
 
+    let fontColor = circle.getAttribute('fontcolor') || '#eee'
 
     let style = `
         margin: 0;
@@ -44,10 +45,11 @@ function showPopover(circle) {
         line-height: 1.4em;
         padding-left: 32px;
         position: relative;
+        color: ${fontColor};
     `
     let linkStyle = `
         text-decoration: none;
-        color: #333;
+        color: ${fontColor};
     `
     let iconStyle = `
         position: absolute;
@@ -83,7 +85,7 @@ function showPopover(circle) {
     if (circle.getAttribute('email') !== 'N/A') {
         innerHTML += `
         <p style="${style}">
-            <i style="${iconStyle} transform: scale(.8) translateX(-4px) translateY(2px);" class="icon-envelope"> </i>
+            <i style="${iconStyle}" class="icon-envelope"> </i>
             <a href="mailto:${circle.getAttribute('email')}" style="${linkStyle}">${circle.getAttribute('email')}</a>
         </p>
         `
